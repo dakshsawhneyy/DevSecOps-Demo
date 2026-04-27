@@ -5,6 +5,15 @@ trivy sbom myapp:latest -o sbom.json  # Software Bill of Materials -- detailed i
 
 trivy config .    # misconfiguration scanning
 
+
+# Add file secret.txt
+const API_KEY = "12345-SECRET-KEY";
+
+trivy fs .
+
+
+
+
 # Anchore
 # Pull image
 docker pull nginx
