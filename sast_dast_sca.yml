@@ -28,3 +28,5 @@ file:///path/html
 
 # Run OWASP with GUI
 docker run -it -p 8080:8080 ghcr.io/zaproxy/zaproxy:stable zap-webswing.sh
+
+target url: http://host.docker.internal:3000
