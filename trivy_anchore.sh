@@ -1,6 +1,9 @@
 # trivy scanning
 trivy image --format cyclonedx --output sbom.json <image_name>
 
+trivy sbom myapp:latest -o sbom.json  # Software Bill of Materials -- detailed inventory of software components
+
+trivy config .    # misconfiguration scanning
 
 # Anchore
 # Pull image
