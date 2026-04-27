@@ -16,3 +16,4 @@ python3 -m venv .venv
 pip install pip-audit
 pip audit -r requirements.txt
 
+OWASP juice shop
