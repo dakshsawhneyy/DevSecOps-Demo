@@ -17,3 +17,14 @@ pip install pip-audit
 pip audit -r requirements.txt
 
 OWASP juice shop
+
+# Install OWASP ZAP
+docker run -d --name juice-shop -p 3000:3000 bkimminich/juice-shop
+
+# Install zap using flow
+
+# Access report on browser
+file:///path/html 
+
+# Run OWASP with GUI
+docker run -it -p 8080:8080 ghcr.io/zaproxy/zaproxy:stable zap-webswing.sh
