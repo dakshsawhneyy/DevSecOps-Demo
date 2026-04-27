@@ -1,0 +1,18 @@
+# Run SonarQube
+docker run -d -p 9000:9000 --name sonarqube sonarqube:9.9-community
+
+# use SonarQube CLI
+sonar-scanner -Dsonar.host.url=http://localhost:9000 -Dsonar.login=<TOKEN>
+
+# For token
+setting -> myaccount -> security -> create token
+
+
+# SCA --- 
+
+# create virtual environment
+python3 -m venv .venv
+
+pip install pip-audit
+pip audit -r requirements.txt
+
