@@ -10,7 +10,7 @@ trivy config .    # misconfiguration scanning
 const API_KEY = "12345-SECRET-KEY";
 
 trivy fs .
-
+trivy repo https://github.com/example/repo
 
 
 
