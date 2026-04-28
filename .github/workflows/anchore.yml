@@ -1,0 +1,23 @@
+name: Anchore Scan
+
+on:
+  push:
+
+jobs:
+  anchore:
+    runs-on: ubuntu-latest
+    name: Anchore Image Scan
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      # - name: Build Image
+      #   run: docker build -t myapp:latest .
+
+      - name: Run Anchore Scan
+        uses: anchore/scan-action@v3
+        with:
+          image: "dakshsawhneyy/demo-service-a"
+          fail-build: true
+          severity-cutoff: high
