@@ -1,23 +1,26 @@
-name: Anchore Scan
+name: Grype Scan
 
 on:
   push:
 
 jobs:
-  anchore:
+  scan:
     runs-on: ubuntu-latest
-    name: Anchore Image Scan
 
     steps:
       - name: Checkout
         uses: actions/checkout@v4
 
-      # - name: Build Image
-      #   run: docker build -t myapp:latest .
+      - name: Install Grype
+        run: |
+          curl -sSfL https://raw.githubusercontent.com/anchore/grype/main/install.sh | sh
+          sudo mv ./bin/grype /usr/local/bin/
 
-      - name: Run Anchore Scan
-        uses: anchore/scan-action@v3.6.4
-        with:
-          image: "dakshsawhneyy/demo-service-a"
-        env:
-          GRYPE_DB_VALIDATE_AGE: false
+      - name: Update DB
+        run: grype db update
+
+      - name: Scan Image
+        run: |
+          grype dakshsawhneyy/demo-service-a \
+          --fail-on medium \
+          -o table
