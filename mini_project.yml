@@ -31,7 +31,7 @@ jobs:
         SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}    # Fetch it from sonarqube cloud
 
 
-    # Filesystem Scanning
+    # Filesystem Scanning --- SCA
     - name: Run Trivy FS Scan
       uses: aquasecurity/trivy-action@master
       with:
@@ -49,7 +49,23 @@ jobs:
         image-ref: 'demo-app'
         severity: 'CRITICAL,HIGH'
         exit-code: '1'
+    
+    # Secrets Scanning  
+    - name: Gitleaks Scan
+      uses: gitleaks/gitleaks-action@v2
 
+    # Misconfiguration Scan (VERY IMPRESSIVE PART)
+    - name: Trivy Config Scan
+      uses: aquasecurity/trivy-action@master
+      with:
+        scan-type: 'config'
+        severity: 'HIGH,CRITICAL'
+
+    # DAST 
+    - name: OWASP ZAP Scan
+      uses: zaproxy/action-baseline@v0.10.0
+      with:
+        target: 'http://example.com'
 
       
 # Intentionally add vulnurability
