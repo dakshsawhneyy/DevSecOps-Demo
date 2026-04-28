@@ -1,0 +1,61 @@
+name: CI Pipeline
+
+on:
+  push:
+    branches: [ "main" ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Run app
+        run: echo "App running..."
+
+
+    # Extend It -- SAST
+      - name: SonarQube Scan
+        uses: SonarSource/sonarqube-scan-action@v2
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}    # Fetch it from sonarqube cloud
+  
+  
+      # Filesystem Scanning --- SCA
+      # run: npm audit --audit-level=high
+      - name: Run Trivy FS Scan
+        uses: aquasecurity/trivy-action@master
+        with:
+          scan-type: 'fs'
+          severity: 'CRITICAL,HIGH'
+          exit-code: '1'
+  
+      - name: Build Docker Image
+        run: docker build -t demo-app .
+  
+      # Image Scanning
+      - name: Trivy Image Scan
+        uses: aquasecurity/trivy-action@master
+        with:
+          image-ref: 'demo-app'
+          severity: 'CRITICAL,HIGH'
+          exit-code: '1'
+      
+      # Secrets Scanning  
+      - name: Gitleaks Scan
+        uses: gitleaks/gitleaks-action@v2
+  
+      # Misconfiguration Scan (VERY IMPRESSIVE PART)
+      - name: Trivy Config Scan
+        uses: aquasecurity/trivy-action@master
+        with:
+          scan-type: 'config'
+          severity: 'HIGH,CRITICAL'
+  
+      # DAST 
+      # - name: OWASP ZAP Scan
+      #   uses: zaproxy/action-baseline@v0.10.0
+      #   with:
+      #     target: 'http://example.com'
