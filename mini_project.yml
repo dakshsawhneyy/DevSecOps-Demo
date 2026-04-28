@@ -1,0 +1,5 @@
+# Normal DevOps Pipeline
+Code → Build → Test → Security → Package → Deploy
+
+# DevSecOps Pipeline
+Code → SAST → Dependency Scan → Build → Image Scan → Deploy
