@@ -1,4 +1,5 @@
 # trivy scanning
+trivy image --severity HIGH,CRITICAL nginx:latest
 trivy image --format cyclonedx --output sbom.json <image_name>
 
 # Useful for compliance + audits
