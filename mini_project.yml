@@ -3,3 +3,59 @@ Code → Build → Test → Security → Package → Deploy
 
 # DevSecOps Pipeline
 Code → SAST → Dependency Scan → Build → Image Scan → Deploy
+
+
+# Pipeline
+name: CI Pipeline
+
+on:
+  push:
+    branches: [ "main" ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Run app
+        run: echo "App running..."
+
+
+    # Extend It -- SAST
+    - name: SonarQube Scan
+      uses: SonarSource/sonarqube-scan-action@v2
+      env:
+        SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}    # Fetch it from sonarqube cloud
+
+
+    # Filesystem Scanning
+    - name: Run Trivy FS Scan
+      uses: aquasecurity/trivy-action@master
+      with:
+        scan-type: 'fs'
+        severity: 'CRITICAL,HIGH'
+        exit-code: '1'
+
+    - name: Build Docker Image
+      run: docker build -t demo-app .
+
+    # Image Scanning
+    - name: Trivy Image Scan
+      uses: aquasecurity/trivy-action@master
+      with:
+        image-ref: 'demo-app'
+        severity: 'CRITICAL,HIGH'
+        exit-code: '1'
+
+
+      
+# Intentionally add vulnurability
+npm install lodash@4.17.11
+
+
+
+
+
