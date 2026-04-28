@@ -43,6 +43,13 @@ CMD ["node", "app.js"]
 
 ##############################################################
 
+# Create sonar-project.properties file
+sonar.projectKey=your_project
+sonar.organization=your_org
+sonar.host.url=https://sonarcloud.io
+
+# Click on analyze new project and
+# select github repo 
 
 # Pipeline
 name: CI Pipeline
