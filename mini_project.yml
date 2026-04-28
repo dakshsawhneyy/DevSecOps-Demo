@@ -120,10 +120,7 @@ jobs:
         target: 'http://example.com'
 
       
-# Intentionally add vulnurability
-npm install lodash@4.17.11
-
-
-
-
+# intentionally fail gitleaks
+# create secrets.env
+API_KEY=chehfe33uhfu29di0q1
 
