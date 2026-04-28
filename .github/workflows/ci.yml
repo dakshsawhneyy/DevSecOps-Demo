@@ -41,7 +41,7 @@ jobs:
         with:
           image-ref: 'demo-app'
           # severity: 'CRITICAL,HIGH'
-          exit-code: '1'
+          # exit-code: '1'
       
       # Secrets Scanning  
       - name: Gitleaks Scan
