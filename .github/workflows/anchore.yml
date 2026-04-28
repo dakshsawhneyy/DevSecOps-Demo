@@ -19,3 +19,5 @@ jobs:
         uses: anchore/scan-action@v3.6.4
         with:
           image: "dakshsawhneyy/demo-service-a"
+        env:
+          GRYPE_DB_AUTO_UPDATE: true
