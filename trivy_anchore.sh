@@ -9,18 +9,22 @@ trivy repo https://github.com/example/repo
 
 
 
-# Anchore
+# Anchore - Deprecated
 # Pull image
-docker pull nginx
+# docker pull nginx
 
-# Add to Anchore
-anchore-cli image add nginx:latest
+# # Add to Anchore
+# anchore-cli image add nginx:latest
 
-# Check vulnerabilities
-anchore-cli image vuln nginx:latest all
+# # Check vulnerabilities
+# anchore-cli image vuln nginx:latest all
 
-# Policy evaluation
-anchore-cli evaluate check nginx:latest
+# # Policy evaluation
+# anchore-cli evaluate check nginx:latest
+
+
+# Grype is the new anchore
+
 
 
 # CICD
@@ -78,3 +82,32 @@ jobs:
           image: "myapp:latest"
           fail-build: true
           severity-cutoff: high
+
+
+# grype pipeline
+name: Grype Scan
+
+on:
+  push:
+
+jobs:
+  scan:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install Grype
+        run: |
+          curl -sSfL https://raw.githubusercontent.com/anchore/grype/main/install.sh | sh
+          sudo mv ./bin/grype /usr/local/bin/
+
+      - name: Update DB
+        run: grype db update
+
+      - name: Scan Image
+        run: |
+          grype dakshsawhneyy/demo-service-a \
+          --fail-on medium \
+          -o table
