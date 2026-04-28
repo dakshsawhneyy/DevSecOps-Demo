@@ -51,6 +51,11 @@ sonar.host.url=https://sonarcloud.io
 # Click on analyze new project and
 # select github repo 
 
+
+# For disabling analysis method 
+# go to settings -> Analysis Method -> Disable
+
+
 # Pipeline
 name: CI Pipeline
 
