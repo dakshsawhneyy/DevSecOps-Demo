@@ -5,6 +5,45 @@ Code → Build → Test → Security → Package → Deploy
 Code → SAST → Dependency Scan → Build → Image Scan → Deploy
 
 
+#### Application
+const express = require('express');
+const app = express();
+
+app.get('/', (req, res) => {
+  res.send('Hello DevSecOps!');
+});
+
+app.listen(3000, () => console.log('App running'));
+
+
+# Dockerfile
+# Stage 1: Build
+FROM node:18 AS builder
+
+WORKDIR /app
+
+COPY package*.json ./
+RUN npm install
+
+COPY app.js app.js
+
+# Stage 2: Production
+FROM node:18-alpine
+WORKDIR /app
+
+COPY --from=builder /app /app
+
+# Creating a non root user
+RUN addgroup appgroup && adduser -S appuser -G appgroup
+USER appuser
+
+# Running the Application
+CMD ["node", "app.js"]
+
+
+##############################################################
+
+
 # Pipeline
 name: CI Pipeline
 
@@ -32,6 +71,7 @@ jobs:
 
 
     # Filesystem Scanning --- SCA
+    # run: npm audit --audit-level=high
     - name: Run Trivy FS Scan
       uses: aquasecurity/trivy-action@master
       with:
