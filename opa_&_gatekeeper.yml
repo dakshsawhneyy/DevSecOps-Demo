@@ -25,7 +25,7 @@ spec:
 # Add POLICY
 --- Rule: “No root containers allowed”
 
-# ConstraintTemplate -- Definition
+# ConstraintTemplate -- HOW to check
 apiVersion: templates.gatekeeper.sh/v1
 kind: ConstraintTemplate
 metadata:
@@ -47,7 +47,7 @@ spec:
         }
 
 
-# Constraint -- Rule Applied - This tells Gatekeeper where to enforce the rule.
+# Constraint -- Rule Applied - Where to check
 apiVersion: constraints.gatekeeper.sh/v1beta1
 kind: K8sDenyRunRoot  # Uses the template you defined earlier.
 metadata:
