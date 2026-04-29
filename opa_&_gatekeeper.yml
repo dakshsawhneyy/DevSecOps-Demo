@@ -80,10 +80,37 @@ spec:
     securityContext:
       runAsUser: 1000
 
-
+####################################################
 “No latest tag” policy
 
-violation[{"msg": msg}] {
-  input.review.object.spec.containers[_].image == "*:latest"
-  msg := "latest tag not allowed"
-}
+# Template
+apiVersion: templates.gatekeeper.sh/v1
+kind: ConstraintTemplate
+metadata:
+  name: k8sdenylatesttag
+spec:
+  crd:
+    spec:
+      names:
+        kind: K8sDenyLatestTag
+  targets:
+    - target: admission.k8s.gatekeeper.sh
+      rego: |
+        package k8sdenylatesttag
+
+        violation[{"msg": msg}] {
+          image := input.review.object.spec.containers[_].image
+          endswith(image, ":latest")
+          msg := sprintf("Image %v uses latest tag which is not allowed", [image])
+        }
+
+# Constraint
+apiVersion: constraints.gatekeeper.sh/v1beta1
+kind: K8sDenyLatestTag
+metadata:
+  name: deny-latest
+spec:
+  match:
+    kinds:
+      - apiGroups: [""]
+        kinds: ["Pod"]
