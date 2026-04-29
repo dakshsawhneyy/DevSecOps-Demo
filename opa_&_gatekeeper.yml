@@ -36,6 +36,7 @@ spec:
       names:
         kind: K8sDenyRunRoot
   targets:
+    # Runs during admission control (when resources are created/updated).
     - target: admission.k8s.gatekeeper.sh
       rego: |
         package k8sdenyrunroot
@@ -46,9 +47,9 @@ spec:
         }
 
 
-# Constraint -- Rule Applied
+# Constraint -- Rule Applied - This tells Gatekeeper where to enforce the rule.
 apiVersion: constraints.gatekeeper.sh/v1beta1
-kind: K8sDenyRunRoot
+kind: K8sDenyRunRoot  # Uses the template you defined earlier.
 metadata:
   name: deny-root
 spec:
@@ -56,3 +57,29 @@ spec:
     kinds:
       - apiGroups: [""]
         kinds: ["Pod"]
+
+
+# Create pod with non root access
+kubectl get pod <pod-name> -o yaml > pod.yaml
+
+# OR Change Template
+apiVersion: v1
+kind: Pod
+metadata:
+  name: test-pod
+spec:
+  containers:
+  - name: nginx
+    image: nginx
+    # non root config
+    securityContext:
+      runAsUser: 1000
+      runAsNonRoot: true
+
+
+“No latest tag” policy
+
+violation[{"msg": msg}] {
+  input.review.object.spec.containers[_].image == "*:latest"
+  msg := "latest tag not allowed"
+}
