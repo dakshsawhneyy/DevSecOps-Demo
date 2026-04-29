@@ -41,7 +41,7 @@ USER appuser
 CMD ["node", "app.js"]
 
 
-##############################################################
+############################################################
 
 # Create sonar-project.properties file
 sonar.projectKey=your_project
