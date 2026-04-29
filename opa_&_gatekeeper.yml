@@ -22,6 +22,11 @@ spec:
     image: nginx
 
 
+# removes Kubernetes built-in restriction (PSA)
+kubectl label namespace default pod-security.kubernetes.io/enforce=privileged --overwrite
+
+
+
 # Add POLICY
 --- Rule: “No root containers allowed”
 
@@ -36,7 +41,6 @@ spec:
       names:
         kind: K8sDenyRunRoot
   targets:
-    # Runs during admission control (when resources are created/updated).
     - target: admission.k8s.gatekeeper.sh
       rego: |
         package k8sdenyrunroot
@@ -49,7 +53,7 @@ spec:
 
 # Constraint -- Rule Applied - Where to check
 apiVersion: constraints.gatekeeper.sh/v1beta1
-kind: K8sDenyRunRoot  # Uses the template you defined earlier.
+kind: K8sDenyRunRoot
 metadata:
   name: deny-root
 spec:
@@ -61,6 +65,7 @@ spec:
 
 # Create pod with non root access
 kubectl get pod <pod-name> -o yaml > pod.yaml
+
 
 # OR Change Template
 apiVersion: v1
@@ -74,7 +79,6 @@ spec:
     # non root config
     securityContext:
       runAsUser: 1000
-      runAsNonRoot: true
 
 
 “No latest tag” policy
