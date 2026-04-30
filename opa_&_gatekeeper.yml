@@ -1,4 +1,4 @@
-Open Policy Agent (OPA): A policy engine used to enforce rules.
+`Open Policy Agent (OPA): A policy engine used to enforce rules.
 Gatekeeper: A Kubernetes admission controller built on OPA.
 Together, they let you block unsafe configurations before they get deployed.
 
@@ -45,6 +45,7 @@ spec:
           msg := "Running as root is not allowed"
         }
 
+-- kubectl get constrainttemplate
 
 # Constraint -- Rule Applied - Where to check
 apiVersion: constraints.gatekeeper.sh/v1beta1
@@ -57,6 +58,7 @@ spec:
       - apiGroups: [""]
         kinds: ["Pod"]
 
+-- kubectl get constraints
 
 # removes Kubernetes built-in restriction (PSA)
 kubectl label namespace default pod-security.kubernetes.io/enforce=privileged --overwrite
