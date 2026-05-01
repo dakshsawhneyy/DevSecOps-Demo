@@ -137,6 +137,19 @@ spec:
 
         violation[{"msg": msg}] {
           container := input.review.object.spec.containers[_]
+          not container.resources
+          msg := sprintf("Container %v must define resources", [container.name])
+        }
+
+        violation[{"msg": msg}] {
+          container := input.review.object.spec.containers[_]
+          container.resources
+          not container.resources.limits
+          msg := sprintf("Container %v must define limits", [container.name])
+        }
+        
+        violation[{"msg": msg}] {
+          container := input.review.object.spec.containers[_]
           not container.resources.limits.cpu
           msg := sprintf("Container %v must have CPU limits set", [container.name])
         }
