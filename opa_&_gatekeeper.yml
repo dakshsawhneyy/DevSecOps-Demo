@@ -53,6 +53,7 @@ kind: K8sDenyRunRoot
 metadata:
   name: deny-root
 spec:
+  enforcementAction: deny
   match:
     kinds:
       - apiGroups: [""]
@@ -112,6 +113,7 @@ kind: K8sDenyLatestTag
 metadata:
   name: deny-latest
 spec:
+  enforcementAction: deny
   match:
     kinds:
       - apiGroups: [""]
@@ -166,6 +168,7 @@ kind: K8sRequiredResourceLimits
 metadata:
   name: require-resource-limits
 spec:
+  enforcementAction: deny
   match:
     kinds:
       - apiGroups: [""]
